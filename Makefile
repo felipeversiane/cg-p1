@@ -8,11 +8,14 @@ help: ## lista os alvos
 
 up: serve ## sobe o app de estudo em http://localhost:$(PORT)/app/
 
-serve: ## servidor estático na raiz do repositório
-	@echo "→ http://localhost:$(PORT)/app/   (Ctrl+C para parar)"
-	@$(PYTHON) -m http.server $(PORT)
+serve: ## servidor estático na raiz; usa a próxima porta livre a partir de $(PORT)
+	@p=$(PORT); \
+	while $(PYTHON) -c "import socket,sys; s=socket.socket(); sys.exit(0 if s.connect_ex(('127.0.0.1',$$p))==0 else 1)"; do \
+	  echo "porta $$p ocupada, tentando $$((p+1))…"; p=$$((p+1)); done; \
+	echo "→ http://localhost:$$p/app/   (Ctrl+C para parar)"; \
+	exec $(PYTHON) -m http.server $$p
 
-open: ## abre o app no navegador (com o servidor já no ar)
+open: ## abre o app no navegador (PORT=a porta que o make up informou)
 	@xdg-open http://localhost:$(PORT)/app/ >/dev/null 2>&1 || echo "abra http://localhost:$(PORT)/app/"
 
 test: ## confere que mvp.js e tools/mvp.py dão o mesmo resultado
