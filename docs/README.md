@@ -6,7 +6,7 @@ Material de estudo montado a partir do livro (`livro-ocr/`), das provas anterior
 
 ## App de estudo (navegador)
 ```
-python3 -m http.server 8000      # na raiz do repositório
+make up      # ou: python3 -m http.server 8000
 # abra http://localhost:8000/app/
 ```
 Lê os `.md` de `docs/` (fonte da verdade): navegação e busca nos resumos, **cards com progresso**, **provas em modo treino**, **calculadora MVP** (digite a matrícula). O filtro 🔗 apoio / 🚫 fora fica no topo; por padrão só aparece o que está **dentro** do escopo. O progresso fica no `localStorage` do navegador. Sem build; `marked` está em `app/vendor` (funciona offline).
