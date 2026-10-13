@@ -1,6 +1,6 @@
 # Cap. 2 — Conceitos fundamentais (livro p. 1–24 do PDF)
 
-> **Escopo da prova: 2.2 a 2.6.** A seção 5 abaixo (cor, 2.7) está **fora**.
+> **Escopo da prova: 2.2 a 2.6.** Cor (2.7) está no **anexo** no fim do arquivo (🚫 fora).
 
 > Capítulo mais "decoreba" e menos provável de cair nas questões práticas. Foco: **pipeline**, **framebuffer**, **janela × viewport**, **modelos de cor**.
 
@@ -39,7 +39,12 @@
 - **Gargalo = discretização** (nº de píxeis e acessos à memória), não a geometria.
 - Pipeline (tempo real, compromisso FPS×realismo) × **fotorrealismo/ray tracing** (qualidade máx., reflexões múltiplas, lento).
 
-## 5. Cor
+## Exercícios do livro (cap. 2)
+2.1 blocos da arquitetura raster · 2.2 janela × viewport · 2.3 blocos do pipeline · 2.4 framebuffer · 2.5 modelo de cor para laser monocromática (→ só níveis de cinza/preto: modelo com **luminância/K**; CMY não é necessário).
+
+---
+## Anexo 🚫 fora do escopo (2.7 — modelos de cor)
+### 5. Cor
 - **Teoria dos 3 estímulos** (3 tipos de cones; 400 nm–700 nm).
 - **RGB** aditivo (ecrãs): cubo unitário; preto (0,0,0), branco (1,1,1), cinzas na diagonal. **sRGB** normaliza primárias + gama.
 - **CMY** subtrativo (impressoras): `[R,G,B] = [1,1,1] − [C,M,Y]`; branco (0,0,0), preto (1,1,1). **CMYK** não é modelo: só acrescenta tinteiro preto (K).
@@ -47,5 +52,3 @@
 - **YC'bC'r (YUV)**: luma `Y' = 0,299R + 0,587G + 0,114B`; crominâncias = diferenças. Usado em TV e **JPEG** (olho é mais sensível à luminância → comprime a crominância).
 - **CIE XYZ**: cobre todo o espectro visível; **diagrama de cromaticidade** (x,y; z = 1−x−y). Triângulo de 3 primárias **nunca** cobre todas as cores visíveis.
 
-## Exercícios do livro (cap. 2)
-2.1 blocos da arquitetura raster · 2.2 janela × viewport · 2.3 blocos do pipeline · 2.4 framebuffer · 2.5 modelo de cor para laser monocromática (→ só níveis de cinza/preto: modelo com **luminância/K**; CMY não é necessário).

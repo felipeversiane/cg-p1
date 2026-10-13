@@ -1,6 +1,6 @@
 # Cap. 3 — Transformações geométricas (livro p. 25–42 do PDF)
 
-> **Escopo da prova: 3.1 a 3.5.** A seção 4 abaixo (modelação hierárquica/grafo de cena, 3.6) está **fora**.
+> **Escopo da prova: 3.1 a 3.5.** Modelação hierárquica/grafo de cena (3.6) está no **anexo** no fim do arquivo (🚫 fora).
 
 > **Alto risco de prova** (Questão MVP vale 5,0 pts em 2024). Aqui está a base da conta no computador.
 
@@ -34,11 +34,14 @@ Rz(β) = | cosβ -senβ 0 0 |   Rx(β) = | 1 0    0     0 |   Ry(β) = |  cosβ 
 - "Rotação em torno do eixo Z **central/no centro do triângulo**" ⇒ C = **centróide** = média dos 3 vértices.
 - "Aumento do objeto em dobro" ⇒ S(2,2,2). Em dúvida do pivô: **diga explicitamente** na prova qual assumiu (livro: escala é relativa à origem; "mantendo o centro" exige T(C)·S·T(−C)).
 
-## 4. Modelação hierárquica e grafo de cena
+## Exercícios do livro (cap. 3)
+3.1–3.4 composição e não-comutatividade (T·R·S ≠ S·R·T) · 3.5–3.7 transformar triângulo 3D em outro · 3.8–3.9 bicicleta (referencial da roda dentro do da bicicleta: é hierarquia, tema de 3.6 → provavelmente 🚫 fora).
+
+---
+## Anexo 🚫 fora do escopo (3.6 — modelação hierárquica)
+### 4. Modelação hierárquica e grafo de cena
 - Peças modeladas na origem (coord. locais) e posicionadas por uma **transformação de instanciação**.
 - Filho herda a matriz do pai: `M_braço = M_base · T(0,h_base,0) · Rz(α)`; `M_antebraço = M_braço · T(L_braço,0,0) · Rz(−β)`.
 - Girar a base arrasta tudo; girar o antebraço só ele.
 - **Grafo de cena** = grafo acíclico de nós/arcos que guarda objetos + transformações. Primitivas **unitárias** (cubo/cilindro de lado 1) viram peças por escala + translação de metade do comprimento.
 
-## Exercícios do livro (cap. 3)
-3.1–3.4 composição e não-comutatividade (T·R·S ≠ S·R·T) · 3.5–3.7 transformar triângulo 3D em outro · 3.8–3.9 bicicleta (mudança de referencial e rodas girando: deslocar x ⇒ roda gira x/r rad).

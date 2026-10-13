@@ -2,6 +2,8 @@
 
 Todas as provas (2024 Estudo, 2024 P1, 2025 P1) têm essa questão e ela é a mais pesada (5,0 pts em 2024). A planilha `MVP_Excel_corrigido.xlsx` faz a conta; **a prova cobra que você apresente as matrizes intermediárias nomeadas**, o resultado final e a interpretação.
 
+> **Convenção: OpenGL** (câmera olha para −z, NDC z ∈ [−1,1], vetores coluna, `MVP = P·V·M`) — a mesma da planilha. Matrícula **sempre parametrizada**: `python3 tools/mvp.py --prova 2025p1 --matricula <sua>`.
+
 ## 0. Antes de tudo
 1. **Calcule X e Y da sua matrícula** (2024: X = último dígito, Y = penúltimo; 2025: `Y = (último dígito mod 5) + 2`, `X = 8 − Y`).
 2. Escreva as coordenadas finais dos 3 vértices.
