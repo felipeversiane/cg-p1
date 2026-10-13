@@ -21,7 +21,8 @@ Material de estudo montado a partir do livro (`livro-ocr/`), das provas anterior
 ## Arquivos
 - `resumos/` — um resumo por capítulo (2, 3, 5, 7, 8).
 - `cards.md` — cartões Q→A **ordenados por prioridade** (🔴→⚪, depois 🔗 apoio e 🚫 fora).
-- `escopo-e-prioridade.md` — escopo, níveis (dentro/apoio/fora) e matriz de recorrência.
+- `escopo-e-prioridade.md` — escopo, **regra de classificação/prioridade** (4 passos) e matriz de recorrência.
+- `classificacao-cards.md` — cada card com seção do livro, tema, frequência e nível (aplicação da regra).
 - `provas.md` — questões das 3 provas com resposta-modelo e mapa de temas.
 - `mvp-passo-a-passo.md` — mapeamento enunciado→planilha, ordem das matrizes, interpretação de visibilidade.
 - `../tools/mvp.py` — **mesma conta da planilha em Python** (validado: reproduz o estado atual da planilha). Serve para conferir sua resposta.
