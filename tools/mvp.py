@@ -73,6 +73,8 @@ def perspective(fov, largura, altura, near, far, tipo="Vertical"):
     m[3][2] = -1
     return m
 
+ESCALA_PIVO = None   # 'Origem' | 'Centro' | None (usa o do preset)
+
 def fmt(m):
     return "\n".join("  [" + "  ".join(f"{x:9.4f}" for x in r) + "]" for r in m)
 
@@ -86,6 +88,8 @@ def run(pts, rot=("Nenhuma", 0, "Origem"), escala=(1, "Centro"), desloc=(0, 0, 0
         MR = em_torno_de(c0, MR)
     pts_r = [mat_vec(MR, list(p) + [1])[:3] for p in pts]
     fator, pivo_s = escala
+    if ESCALA_PIVO:
+        pivo_s = ESCALA_PIVO
     cs = centro(pts_r) if pivo_s == "Centro" else [0, 0, 0]
     MS = em_torno_de(cs, S(fator, fator, fator))
     MT = T(*desloc)
@@ -175,7 +179,10 @@ if __name__ == "__main__":
     ap.add_argument("--ultimo", type=int, help="último dígito (alternativa a --matricula)")
     ap.add_argument("--penultimo", type=int, help="penúltimo dígito (alternativa a --matricula)")
     ap.add_argument("--demo", action="store_true", help="reproduz o estado atual da planilha")
+    ap.add_argument("--escala-pivo", choices=["Origem", "Centro"], help="força o pivô da escala")
+    ap.add_argument("--ambos", action="store_true", help="roda as duas leituras do pivô da escala e compara")
     a = ap.parse_args()
+    ESCALA_PIVO = a.escala_pivo
     if a.demo:
         run([(2, 3, 6), (-2, 6, 6), (-3, -2, 6)], rot=("Z", 45, "Origem"), escala=(0.5, "Centro"),
             eye=(0, -0.5, -5), fov=45, largura=1024, altura=768, near=1, far=6)
@@ -186,6 +193,16 @@ if __name__ == "__main__":
             ult, pen = a.ultimo, a.penultimo
         else:
             ap.error("informe --matricula ou --ultimo e --penultimo")
-        PROVAS[a.prova](ult, pen)
+        if a.ambos:
+            import io, contextlib
+            for piv in ("Origem", "Centro"):
+                ESCALA_PIVO = piv
+                buf = io.StringIO()
+                with contextlib.redirect_stdout(buf):
+                    PROVAS[a.prova](ult, pen)
+                est = [l for l in buf.getvalue().splitlines() if l.startswith(("==", "--", "Estado"))]
+                print(f"[escala em torno de {piv}]"); print("\n".join("  " + l for l in est))
+        else:
+            PROVAS[a.prova](ult, pen)
     else:
         ap.print_help()

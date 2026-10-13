@@ -68,7 +68,7 @@ Depois de mudar, confira `G34` na planilha. Em geral, **afastar o olho ao longo 
 
 ## 7. Armadilhas
 - **FOV horizontal × vertical** (`E37`): erro comum de 1 linha.
-- **Pivô** (`C15`, `C20`): Centro × Origem muda tudo.
+- **Pivô** (`C15`, `C20`): Centro × Origem muda tudo. Se o enunciado **não diz** o pivô da escala, **teste os dois** em `C20`, compare `G34` e **declare a suposição** na resposta.
 - **Target = Centro** usa o centro **após** as transformações do objeto.
 - **Rotação negativa** gira no sentido horário.
 - **Up paralelo à direção de visão** → câmera inválida.
