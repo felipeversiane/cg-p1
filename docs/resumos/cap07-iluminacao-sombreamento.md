@@ -1,6 +1,6 @@
 # Cap. 7 — Iluminação e sombreamento (livro p. 65–84 do PDF)
 
-> **Escopo da prova: 7.1, 7.2.1–7.2.3 e 7.3.** Ficam **fora** 7.2.4–7.2.8 (expressão global, aproximação de Blinn, atenuação, luz cromática, múltiplas fontes).
+> **Escopo da prova: 7.1, 7.2.1–7.2.3 e 7.3.** **🔗 Apoio:** 7.2.4 (soma dos 3 termos). **🚫 Fora:** 7.2.5–7.2.8 (aproximação de Blinn, atenuação, luz cromática, múltiplas fontes) — as linhas correspondentes abaixo estão marcadas.
 
 > Aparece na prova teórica (2024 Estudo Q1 "dois planos", 2025 Q3 "cubo aberração", Phong × Gouraud).
 
@@ -16,15 +16,16 @@
 Modelo **local**: só luz direta das fontes; **sem** sombras, reflexões múltiplas (isso é iluminação global/ray tracing). A **luz ambiente** aproxima as reflexões múltiplas (sem ela, partes não iluminadas ficam pretas).
 
 ```
-I = ka·La  +  kd·Ld·max(n·l, 0)  +  ks·Ls·max(n·h, 0)^β
+I = ka·La  +  kd·Ld·max(n·l, 0)  +  ks·Ls·max(r·v, 0)^α      (🔗 7.2.4: soma dos 3 termos)
+(β e h = versão de Blinn, 🚫 fora)
 ```
 - `n` normal (unitária); `l` vetor **da superfície PARA a luz**; `v` para o observador; `r` reflexo perfeito.
 - **Ambiente**: `Ia = ka La` — uniforme.
 - **Difusa (Lambert)**: `Id = kd Ld cosθ = kd Ld max(n·l,0)` — **independe do observador**; max evita luz "por baixo" do horizonte.
 - **Especular**: `Is = ks Ls max(r·v,0)^α` — depende do observador; **α (brilho/shininess)** alto = brilho pequeno e concentrado (metal polido 100–500).
-- **Aproximação de Blinn**: halfway `h = (l+v)/|l+v|`, usa `(n·h)^β` (evita calcular r). β ≠ α (β ≈ 4α) para ter brilho parecido.
-- **Atenuação**: dividir termos difuso+especular por `a + b·d + c·d²` (ambiente **não** atenua). ≠ *depth cueing* (atenuação atmosférica, cap. 8).
-- **RGB**: aplica-se o modelo a cada canal (k e L por canal). **Várias luzes**: soma (luz é aditiva).
+- 🚫 *(fora: 7.2.5)* **Aproximação de Blinn**: halfway `h = (l+v)/|l+v|`, usa `(n·h)^β` (evita calcular r). β ≠ α (β ≈ 4α) para ter brilho parecido.
+- 🚫 *(fora: 7.2.6)* **Atenuação**: dividir termos difuso+especular por `a + b·d + c·d²` (ambiente **não** atenua). ≠ *depth cueing* (atenuação atmosférica, cap. 8).
+- 🚫 *(fora: 7.2.7–7.2.8)* **RGB**: aplica-se o modelo a cada canal (k e L por canal). **Várias luzes**: soma (luz é aditiva).
 
 ## 3. Sombreamento (shading) — como colorir os fragmentos
 | | **Constante (flat)** | **Gouraud** | **Phong** |

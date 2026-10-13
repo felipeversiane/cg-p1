@@ -1,7 +1,7 @@
 # Cards de estudo (pergunta → resposta)
 
 Como usar: leia a pergunta, **responda em voz alta/papel**, só então abra a resposta (`<details>`). Tags: 📘 livro · 📝 caiu em prova · ⚠ fora do livro · 🔥 prioridade.
-Ordem sugerida: 🔥 primeiro. 🚫 = **fora do escopo** da prova (ver [escopo-e-prioridade.md](escopo-e-prioridade.md)): só leia se sobrar tempo.
+Ordem sugerida: 🔥 primeiro. 🔗 = **apoio** (base conceitual de algo dentro do escopo; estude só a ideia). 🚫 = **fora do escopo** da prova (ver [escopo-e-prioridade.md](escopo-e-prioridade.md)): só leia se sobrar tempo.
 
 ## A. Pipeline e conceitos (cap. 2)
 
@@ -146,7 +146,7 @@ NDC [−1,1]→píxeis: `T(xmin,ymin,0)·S(Δx/2,Δy/2,1)·T(1,1,0)`; z mantém.
 
 ## D. Iluminação e sombreamento (cap. 7)
 
-<details><summary>🚫 📘 Fórmula de Blinn-Phong.</summary>
+<details><summary>🔗 📘 Fórmula de Blinn-Phong.</summary>
 
 `I = ka·La + kd·Ld·max(n·l,0) + ks·Ls·max(n·h,0)^β`, `h = (l+v)/|l+v|`; atenuação `1/(a+bd+cd²)` nos termos de luz direta (não no ambiente).
 </details>
@@ -223,7 +223,7 @@ Só aritmética inteira (ponto médio); sem acumulação de erro de ponto flutua
 Tabela de lados (ordenada por y_min) → lados ativos ordenados por x → spans por pares → incrementa `x += 1/m` por linha; remove em y_max; ignora horizontais.
 </details>
 
-<details><summary>🚫 📘📝 O que é aliasing? Como minimizar?</summary>
+<details><summary>🔗 📘📝 O que é aliasing? Como minimizar?</summary>
 
 Perda por amostragem insuficiente (Nyquist 2×). Pré-filtragem (espaço objeto), pós-filtragem/supersampling, mipmapping (texturas).
 </details>

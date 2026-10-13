@@ -1,6 +1,6 @@
 # Cap. 8 — Discretização, texturas, visibilidade e aliasing (livro p. 85–111 do PDF)
 
-> **Escopo da prova: só 8.3** (seções 3 e 4 abaixo). **Fora:** rasterização (2), composição/Z-buffer/blending (5) e aliasing (6) — leia apenas se sobrar tempo.
+> **Escopo da prova: só 8.3** (seções 3 e 4 abaixo). **🔗 Apoio:** da seção 1/2 só a ideia de fragmento + interpolação de atributos, e da seção 6 só o conceito de aliasing/Nyquist (é o porquê do mipmapping). **🚫 Fora:** algoritmos de rasterização (Bresenham, scanline) e composição (Z-buffer, blending).
 
 > **O assunto preferido da prova**: as três provas têm ≥ 2 questões de textura. As páginas 152–153 do livro (filtragem: magnificação/minificação) **não estão no PDF** — as partes marcadas ⚠ vêm de conhecimento geral, para completar.
 

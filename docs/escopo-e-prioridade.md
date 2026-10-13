@@ -1,20 +1,23 @@
 # Escopo da prova, frequência nas provas e prioridade
 
-## 1. Escopo (informado pelo professor)
-O livro é a referência; **só cai o que está nestas seções**:
+## 1. Escopo (informado pelo professor) + nível de apoio
+O livro é a referência. Três níveis:
+- **Dentro** — pode ser o assunto de uma questão (lista do professor).
+- **🔗 Apoio** — *fora da lista*, mas é a base conceitual de algo dentro; ler só o conceito (1 parágrafo), **sem** exercícios nem cards próprios.
+- **🚫 Fora** — não é base de nada do escopo; ignorar.
 
-| Capítulo | Entra | **Fica de fora** |
-|---|---|---|
-| 2 | **2.2 a 2.6** (arquitetura raster, aplicações 3D, descrição de cenas, síntese de imagem, pipeline) | 2.1 dispositivos, **2.7 cor** (RGB/CMY/HSV/CIE) |
-| 3 | **3.1 a 3.5** (pontos, transformações 2D/3D, homogêneas, composição, pivô) | **3.6 modelação hierárquica / grafo de cena** |
-| 5 | **Capítulo inteiro** (câmara, volumes, View, projeções, recorte×divisão, viewport) | — |
-| 7 | **7.1** fontes de luz, **7.2.1–7.2.3** (ambiente, difusa, especular), **7.3** sombreamento | **7.2.4 a 7.2.8** (expressão global, Blinn, atenuação, luz cromática, múltiplas fontes) |
-| 8 | **8.3** (cálculo de cor: constante, Gouraud, Phong, **texturização 8.3.4**: espaço de textura, filtragem/mipmapping, bump, environment) | 8.1/8.2 rasterização, **8.4 Z-buffer/blending**, 8.5 aliasing |
-| 4, 6 | — (ausentes) | tudo |
+| Capítulo | Dentro | 🔗 Apoio (por quê) | 🚫 Fora |
+|---|---|---|---|
+| 2 | **2.2 a 2.6** (arquitetura raster, aplicações 3D, cenas, síntese de imagem, pipeline) | — | 2.1 dispositivos; **2.7 cor** |
+| 3 | **3.1 a 3.5** | — | **3.6 modelação hierárquica / grafo de cena** |
+| 5 | **Capítulo inteiro** | — | — |
+| 7 | **7.1**, **7.2.1–7.2.3** (ambiente, difusa, especular), **7.3** (sombreamento) | **7.2.4** expressão global: é a soma dos 3 termos que Gouraud/Phong calculam por vértice/fragmento | **7.2.5–7.2.8** (aprox. de Blinn, atenuação, luz cromática, várias fontes) |
+| 8 | **8.3** (constante, Gouraud, Phong, texturização 8.3.4) | **8.2 (só a ideia)**: fragmento e interpolação linear de atributos pelo rasterizador — base de 8.3 inteiro. **8.5 (só o conceito)**: aliasing é o *porquê* da filtragem/mipmapping 8.3.4.2 | Algoritmos de 8.2 (Bresenham, scanline, tabelas de lados); **8.4 Z-buffer/blending** |
+| 4, 6 | — | — | ausentes do PDF |
 
 ## 2. Regra de prioridade (proposta)
 `Prioridade = está no escopo? × (nº de provas em que o tema reapareceu) × peso da questão`
-- **Fora do escopo ⇒ não estudar**, mesmo que tenha caído (ex.: nada de Bresenham, Z-buffer, CMY).
+- **🚫 Fora ⇒ não estudar** (Bresenham, Z-buffer, CMY…). **🔗 Apoio ⇒ só o conceito**, o suficiente para fundamentar a resposta de um item dentro.
 - Tema que **caiu mas não está no livro** (ex.: TBN, anisotrópico, correção de perspectiva) ⇒ **prioridade baixa**; basta a ideia, ancorada no que o livro diz.
 - Dentro do escopo, ordenar por recorrência: 🔴 3/3 provas · 🟠 2/3 · 🟡 1/3 · ⚪ nunca caiu.
 
