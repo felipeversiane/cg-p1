@@ -179,12 +179,12 @@ const fmt = x => { const s = (Math.abs(x) < 5e-9 ? 0 : x).toFixed(4); return s.r
 const matHTML = (nome, m) => `<div class="mat"><div class="t">${esc(nome)}</div><table>${m.map(r => '<tr>' + r.map(x => `<td>${fmt(x)}</td>`).join('') + '</tr>').join('')}</table></div>`;
 const vec = v => v.map(fmt).join(', ');
 function viewMVP() {
-  const st = store.get('mvp', { prova: '2025p1', mat: '' });
+  const st = store.get('mvp', { prova: '2025p1', mat: '20221060140130' });
   $('#view').innerHTML = `<h1>Calculadora MVP</h1>
     <p class="stat">Convenção OpenGL · <code>MVP = P·V·M</code> · <code>M = T·S·R</code>. Os campos abaixo são editáveis; o preset recalcula X/Y a partir da matrícula.</p>
     <div class="form">
       <div><label>Prova</label><select id="prova">${Object.entries(MVP.PRESETS).map(([k, p]) => `<option value="${k}">${p.nome}</option>`).join('')}<option value="livre">Livre (sem preset)</option></select></div>
-      <div><label>Matrícula (digite; usa último e penúltimo dígitos)</label><input id="mat" inputmode="numeric" value="${esc(st.mat)}" placeholder="ex.: 20231847"></div>
+      <div><label>Matrícula (digite; usa último e penúltimo dígitos)</label><input id="mat" inputmode="numeric" value="${esc(st.mat)}" placeholder="20221060140130"></div>
     </div><p id="xy" class="stat"></p><div id="out"></div>`;
   $('#prova').value = st.prova;
   const render = () => {

@@ -1,5 +1,7 @@
 PORT ?= 8000
 PYTHON ?= python3
+PROVA ?= 2025p1
+MAT ?= 20221060140130
 
 .PHONY: help up serve open test mvp pdf
 
@@ -22,7 +24,7 @@ test: ## confere que mvp.js e tools/mvp.py dão o mesmo resultado
 	@node -e 'const M=require("./app/mvp.js");const r=M.run(M.PRESETS["2024p1"].build(7,4)[0]);console.log("js:",r.estado)'
 	@$(PYTHON) -I tools/mvp.py --prova 2024p1 --ultimo 7 --penultimo 4 | grep Estado
 
-mvp: ## calcula no terminal: make mvp PROVA=2025p1 MAT=20231847
+mvp: ## calcula no terminal (matrícula padrão 20221060140130): make mvp PROVA=2024p1 [MAT=…]
 	@$(PYTHON) -I tools/mvp.py --prova $(PROVA) --matricula $(MAT)
 
 pdf: ## gera dist/resumo-teorico.pdf e dist/tutorial-planilha.pdf (A4, P&B)

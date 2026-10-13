@@ -135,6 +135,8 @@ def run(pts, rot=("Nenhuma", 0, "Origem"), escala=(1, "Centro"), desloc=(0, 0, 0
         print("Estado:", estado)
     return dict(M=M, V=V, P=P, MVP=MVP, clip=clip, ndc=ndc, estado=estado, mundo=pts_w)
 
+MATRICULA_PADRAO = "20221060140130"   # matrícula do aluno (padrão quando --matricula não é dada)
+
 def digitos(matricula):
     """Último e penúltimo dígitos de uma matrícula (string ou int)."""
     d = [c for c in str(matricula) if c.isdigit()]
@@ -175,7 +177,7 @@ if __name__ == "__main__":
     import argparse
     ap = argparse.ArgumentParser(description="MVP do triângulo com X/Y vindos da matrícula (convenção OpenGL).")
     ap.add_argument("--prova", choices=PROVAS, help="enunciado a resolver")
-    ap.add_argument("--matricula", help="matrícula completa; usa último e penúltimo dígitos")
+    ap.add_argument("--matricula", help="matrícula completa (padrão: %s)" % MATRICULA_PADRAO)
     ap.add_argument("--ultimo", type=int, help="último dígito (alternativa a --matricula)")
     ap.add_argument("--penultimo", type=int, help="penúltimo dígito (alternativa a --matricula)")
     ap.add_argument("--demo", action="store_true", help="reproduz o estado atual da planilha")
@@ -187,12 +189,10 @@ if __name__ == "__main__":
         run([(2, 3, 6), (-2, 6, 6), (-3, -2, 6)], rot=("Z", 45, "Origem"), escala=(0.5, "Centro"),
             eye=(0, -0.5, -5), fov=45, largura=1024, altura=768, near=1, far=6)
     elif a.prova:
-        if a.matricula:
-            ult, pen = digitos(a.matricula)
-        elif a.ultimo is not None and a.penultimo is not None:
+        if a.ultimo is not None and a.penultimo is not None:
             ult, pen = a.ultimo, a.penultimo
         else:
-            ap.error("informe --matricula ou --ultimo e --penultimo")
+            ult, pen = digitos(a.matricula or MATRICULA_PADRAO)
         if a.ambos:
             import io, contextlib
             for piv in ("Origem", "Centro"):

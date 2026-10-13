@@ -1,10 +1,10 @@
 ---
 description: Resolve a questão MVP (matrizes nomeadas, posição final, visibilidade) com a matrícula
-argument-hint: "<2024p1|2024estudo|2025p1|livre> <matrícula>  — ou cole o enunciado"
+argument-hint: "<2024p1|2024estudo|2025p1> (matrícula padrão) — ou cole o enunciado"
 ---
 Resolva a questão MVP. Entrada: $ARGUMENTS
 
-1. Identifique a prova e a matrícula. Se faltar a matrícula ou o enunciado for novo, **pergunte**.
+1. Identifique a prova. A matrícula é **20221060140130** (último 0, penúltimo 3) — **não pergunte**, salvo se o aluno informar outra. Se o enunciado for novo, extraia os parâmetros dele.
 2. Aplique os PEGAS (inclusive **pivô da escala**: mostre as duas leituras e diga se muda a conclusão) do `CLAUDE.md` (FOV, pivô, sentido, ordem, target, up, near/far) e declare as suposições.
 3. Calcule com o script, nunca de cabeça:
    - preset: `python3 -I tools/mvp.py --prova <prova> --matricula <matrícula>`
