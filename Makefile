@@ -1,7 +1,7 @@
 PORT ?= 8000
 PYTHON ?= python3
 
-.PHONY: help up serve open test mvp
+.PHONY: help up serve open test mvp pdf
 
 help: ## lista os alvos
 	@grep -E '^[a-z]+:.*##' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/'
@@ -24,3 +24,6 @@ test: ## confere que mvp.js e tools/mvp.py dão o mesmo resultado
 
 mvp: ## calcula no terminal: make mvp PROVA=2025p1 MAT=20231847
 	@$(PYTHON) -I tools/mvp.py --prova $(PROVA) --matricula $(MAT)
+
+pdf: ## gera dist/resumo-teorico.pdf e dist/tutorial-planilha.pdf (A4, P&B)
+	@tools/pdf.sh

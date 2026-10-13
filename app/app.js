@@ -12,6 +12,7 @@ const NAV = [
   ['Resumos', [['doc/resumos/cap02-conceitos-fundamentais.md', 'Cap. 2 — Conceitos'], ['doc/resumos/cap03-transformacoes-geometricas.md', 'Cap. 3 — Transformações'],
     ['doc/resumos/cap05-processamento-geometrico.md', 'Cap. 5 — Proc. geométrico'], ['doc/resumos/cap07-iluminacao-sombreamento.md', 'Cap. 7 — Iluminação'],
     ['doc/resumos/cap08-discretizacao-texturas.md', 'Cap. 8 — Texturas']]],
+  ['Imprimir', [['doc/impressao/resumo-teorico.md', 'Resumo teórico'], ['doc/impressao/tutorial-planilha.md', 'Tutorial da planilha (MVP)']]],
   ['Referência', [['doc/mvp-passo-a-passo.md', 'MVP passo a passo'], ['doc/provas.md', 'Provas (texto)'], ['doc/classificacao-cards.md', 'Classificação dos cards']]],
 ];
 const ALL_DOCS = ['README.md', 'escopo-e-prioridade.md', 'mvp-passo-a-passo.md', 'provas.md', 'cards.md',
@@ -268,6 +269,7 @@ async function route() {
   if (!h.startsWith('busca/')) window.scrollTo(0, 0);
 }
 window.addEventListener('hashchange', route);
+$('#print-btn').onclick = () => window.print();
 $('#menu-btn').onclick = () => $('#nav').classList.toggle('open');
 let tmr;
 $('#busca').addEventListener('input', e => { clearTimeout(tmr); tmr = setTimeout(() => {

@@ -11,6 +11,9 @@ make up      # ou: python3 -m http.server 8000
 ```
 Lê os `.md` de `docs/` (fonte da verdade): navegação e busca nos resumos, **cards com progresso**, **provas em modo treino**, **calculadora MVP** (digite a matrícula). O filtro 🔗 apoio / 🚫 fora fica no topo; por padrão só aparece o que está **dentro** do escopo. O progresso fica no `localStorage` do navegador. Sem build; `marked` está em `app/vendor` (funciona offline).
 
+## Impressão (A4, P&B, frente e verso)
+`make pdf` gera `dist/resumo-teorico.pdf` (resumo teórico objetivo, 2 páginas) e `dist/tutorial-planilha.pdf` (folha do MVP: como usar a planilha, 2 páginas) a partir de `docs/impressao/*.md`. No app, o botão **🖨 Imprimir** usa o mesmo estilo de página.
+
 ## Como a prova costuma ser
 1. **Computador**: questão do **MVP do triângulo** (rotação → escala → deslocamento → câmera → projeção → visível?). Pede matrizes intermediárias nomeadas.
 2. **Teórica**: texturas (UV, filtragem, mipmapping, perspectiva), iluminação/sombreamento, shaders/normais.
