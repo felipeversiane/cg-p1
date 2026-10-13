@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Estudo CG — P1</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <button id="menu-btn" aria-label="Menu">☰</button>
+    <strong>Estudo CG — P1</strong>
+    <input id="busca" type="search" placeholder="Buscar nos resumos, cards e provas…" autocomplete="off">
+    <label class="chip" title="Mostrar conteúdo de apoio (só a ideia)"><input type="checkbox" id="f-apoio"> 🔗 apoio</label>
+    <label class="chip" title="Mostrar conteúdo fora do escopo"><input type="checkbox" id="f-fora"> 🚫 fora</label>
+  </header>
+  <div id="layout">
+    <nav id="nav"></nav>
+    <main id="view"></main>
+  </div>
+  <script src="vendor/marked.min.js"></script>
+  <script src="mvp.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

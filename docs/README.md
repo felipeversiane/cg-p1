@@ -4,6 +4,13 @@ Material de estudo montado a partir do livro (`livro-ocr/`), das provas anterior
 
 > **Leia primeiro:** [escopo-e-prioridade.md](escopo-e-prioridade.md) — o que entra na prova, matriz de recorrência e regra de prioridade.
 
+## App de estudo (navegador)
+```
+python3 -m http.server 8000      # na raiz do repositório
+# abra http://localhost:8000/app/
+```
+Lê os `.md` de `docs/` (fonte da verdade): navegação e busca nos resumos, **cards com progresso**, **provas em modo treino**, **calculadora MVP** (digite a matrícula). O filtro 🔗 apoio / 🚫 fora fica no topo; por padrão só aparece o que está **dentro** do escopo. O progresso fica no `localStorage` do navegador. Sem build; `marked` está em `app/vendor` (funciona offline).
+
 ## Como a prova costuma ser
 1. **Computador**: questão do **MVP do triângulo** (rotação → escala → deslocamento → câmera → projeção → visível?). Pede matrizes intermediárias nomeadas.
 2. **Teórica**: texturas (UV, filtragem, mipmapping, perspectiva), iluminação/sombreamento, shaders/normais.
