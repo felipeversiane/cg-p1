@@ -36,9 +36,9 @@ Regra em [escopo-e-prioridade.md](escopo-e-prioridade.md) §2. Colunas: *seção
 | 📘 Por que a projeção usa 4×4 invertível (preserva z)? | 5.5 | dentro | (nenhum: teoria) | 0/3 | sim | ⚪ |
 | 📘 Transformação de viewport? | 5.6 | dentro | (nenhum: MVP termina em clip/NDC) | 0/3 | sim | ⚪ |
 | 📘 Mapeamento direto × inverso? | 8.3.4.1 | dentro | (nenhum: base conceitual do UV) | 0/3 | sim | ⚪ |
-| 📝⚠ Por que a normal precisa da normal matrix? | (não está no livro) | dentro | Lambert (2025 Q3) | 1/3 | **não** | ⚪ |
-| 📝⚠ Por que a interpolação linear de UV no ecrã distorce? | 7.3.4 (correção: fora do livro) | dentro | Distorção em perspetiva (2025 Q2a) | 1/3 | **não** | ⚪ |
-| 📝⚠ Normal mapping em espaço tangente: o que é TBN e onde se monta? | (não está no livro) | dentro | Bump mapping (2025 Q4a) | 1/3 | **não** | ⚪ |
+| 📝⚠ Por que a normal precisa da normal matrix? | (não está no livro) | dentro | Lambert (2025 Q3) | 1/3 | **não** | 🟠 (promovido: prova de consulta) |
+| 📝⚠ Por que a interpolação linear de UV no ecrã distorce? | 7.3.4 (correção: fora do livro) | dentro | Distorção em perspetiva (2025 Q2a) | 1/3 | **não** | 🟠 (promovido: prova de consulta) |
+| 📝⚠ Normal mapping em espaço tangente: o que é TBN e onde se monta? | (não está no livro) | dentro | Bump mapping (2025 Q4a) | 1/3 | **não** | 🟠 (promovido: prova de consulta) |
 | 📘 Liste a ordem dos andares do pipeline de visualização. | 2.6 | dentro | (nenhum: teoria) | 0/3 | sim | ⚪ |
 | 📘 Que blocos formam o pipeline gráfico 3D e qual é o gargalo? | 2.6 | dentro | (nenhum: teoria) | 0/3 | sim | ⚪ |
 | 📘 Diferença entre janela de visualização e viewport? | 2.5.2 | dentro | (nenhum: teoria) | 0/3 | sim | ⚪ |
@@ -48,6 +48,13 @@ Regra em [escopo-e-prioridade.md](escopo-e-prioridade.md) §2. Colunas: *seção
 | 📘 Para que serve a componente ambiente? | 7.2.1 | dentro | (nenhum: base de Lambert/Phong) | 0/3 | sim | ⚪ |
 | 📘 Brilho (shininess) alto significa…? | 7.2.3 | dentro | (nenhum: base de Phong) | 0/3 | sim | ⚪ |
 | 📘 O que são bandas de Mach? | 7.3.1 | dentro | (nenhum: teoria) | 0/3 | sim | ⚪ |
+| 📝 Algoritmo da média de texels (box filter): problema/limitações/melhorias | 8.3.4.2 (+ 8.5) | dentro | Filtragem de textura (2024 P1 Q2, 3,0) | 3/3 | sim | 🔴 |
+| 📝⚠ Como funciona a filtragem anisotrópica | fora do livro | dentro | Filtragem de textura (2025 Q2b) | 3/3 | **não** | 🟠 |
+| 📝⚠ Avaliar explicação de IA (checklist do cubo iluminado) | 7.2.2, 7.3.1 | dentro | Lambert (2025 Q3) | 1/3 | parcial | 🟠 (promovido) |
+| 📘📝 Vantagem/desvantagem do atlas/dado | 8.3.4.1 | dentro | UV (2024 P1 Q1) | 3/3 | parcial | 🟠 |
+| 📝⚠ Procedimento p/ bloco uniforme (duplicar/flat/uniform) | 8.3.2 | dentro | Gouraud × Phong (2025 Q4b) | 2/3 | **não** | 🟠 |
+| 📝⚠ Vertex × fragment shader; attribute/uniform/varying | fora do livro | dentro | Shaders (2025 Q4a/Q4b: "onde implementar") | 1/3 | **não** | 🟠 (promovido) |
+| 📝 Sintoma → parâmetro da câmera | 5.2.2, 5.5.3.4 | dentro | MVP (visível? + ajustar câmera) | 3/3 | sim | 🔴 |
 | 🔗 📘 Fórmula de Blinn-Phong. | 7.2.4 | 🔗 apoio | base do Gouraud × Phong | — | sim | 🔗 |
 | 🔗 📘📝 O que é aliasing? Como minimizar? | 8.5 | 🔗 apoio | base da filtragem 8.3.4.2 | — | sim | 🔗 |
 | 🔗 📘 O que é um fragmento e como os atributos dos vértices chegam a ele? | 8.2 (só a ideia) | 🔗 apoio | base de 8.3 (Gouraud, Phong, textura) | — | sim | 🔗 |
@@ -59,3 +66,5 @@ Regra em [escopo-e-prioridade.md](escopo-e-prioridade.md) §2. Colunas: *seção
 | 📘 Bresenham: por que é melhor que o incremental? | 8.2.1 | 🚫 fora | — | — | sim | 🚫 |
 | 📘 Bresenham: valores iniciais. | 8.2.1 | 🚫 fora | — | — | sim | 🚫 |
 | 📘 Rasterização de polígonos: passos. | 8.2.2 | 🚫 fora | — | — | sim | 🚫 |
+
+**Nota (prova de consulta):** a regra "rebaixa um nível se não está no livro" foi suspensa para os temas ⚠ que caíram na 2025 (normal matrix, TBN, correção de perspectiva, shaders): como o material é consultável, o que cai importa mais que o que está no livro.

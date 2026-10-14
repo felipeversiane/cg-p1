@@ -85,7 +85,7 @@ Mag: poucos texels para muitos píxeis → NEAREST (blocos)/bilinear (borrado). 
 Cada vértice guarda um par (s,t) ∈ [0,1]² (origem convencionada: canto inferior esquerdo). Face inteira: (0,0), (1,0), (1,1), (0,1). Com atlas (ex.: 4×3): u ∈ {0,¼,½,¾,1}, v ∈ {0,⅓,⅔,1}; cada face usa a sua célula. O rasterizador interpola (s,t) e cada fragmento busca o texel (mapeamento inverso).
 </details>
 
-## 🟠 Recorrência 2/3, ou 🔴 rebaixado por não estar no livro (5)
+## 🟠 Recorrência 2/3, ou 🔴 rebaixado por não estar no livro; inclui ⚠ que caiu na 2025 (prova de consulta)
 
 <details><summary>📝⚠ Qual o defeito do mipmapping e a solução?</summary>
 
@@ -110,6 +110,56 @@ Atributos de vértice são interpolados pelo rasterizador. Para bloco uniforme: 
 <details><summary>📝⚠ O que acontece com (s,t) fora de [0,1] — e como repetir a textura?</summary>
 
 Com `REPEAT` a textura se repete: nº de repetições = extensão do intervalo (uv de 0 a 4 ⇒ 4 repetições). `CLAMP` estica a borda. Num atlas, REPEAT repete o atlas inteiro. ⚠ não é do livro.
+</details>
+
+<details><summary>📝⚠ Por que a normal precisa da normal matrix?</summary>
+
+Normais não se transformam por M quando há escala não uniforme; usa-se `transpose(inverse(M))` e renormaliza.
+</details>
+
+<details><summary>📝⚠ Por que a interpolação linear de UV no ecrã distorce?</summary>
+
+Perspectiva não linear (÷w). Corrige-se interpolando s/w, t/w, 1/w e dividindo.
+</details>
+
+<details><summary>📝⚠ Normal mapping em espaço tangente: o que é TBN e onde se monta?</summary>
+
+Base (Tangente, Bitangente, Normal) da superfície. Monta-se no vertex shader com a normal transformada pela normal matrix; no fragment shader leva `n_map` para o mundo.
+</details>
+
+<details><summary>📝 Algoritmo "média dos texels no retângulo [u±Δu/2, v±Δv/2]": problema, limitações e melhorias?</summary>
+
+Problema: aliasing por minificação (1 texel/fragmento descarta o resto). Limitações: O(N) leituras por fragmento (N cresce com a distância); caixa alinhada aos eixos (pegada oblíqua é trapézio); pesos iguais; não trata magnificação. Melhorias: mipmapping/trilinear (pré-filtra, O(1), +33 % memória), anisotrópico ⚠, bilinear na magnificação.
+</details>
+
+<details><summary>📝⚠ Como funciona a filtragem anisotrópica?</summary>
+
+Calcula eixo maior e menor da pegada do píxel na textura; escolhe o nível de mip pelo eixo **menor** e toma 2×–16× amostras ao longo do eixo **maior**. Mais cara, mas mantém nitidez em ângulos rasantes (mipmap simples usa o lado maior ⇒ over-blur).
+</details>
+
+<details><summary>📝⚠ Avaliar a explicação de uma IA sobre um cubo iluminado errado: checklist?</summary>
+
+(1) sinal de `l` (da superfície para a luz); (2) normal normalizada?; (3) normal transformada pela normal matrix?; (4) winding/normal para dentro?; (5) normal por face num cubo é **correta** (flat, 24 vértices), não é bug; (6) `max(n·l,0)`. Responda concordo / em parte / discordo item a item.
+</details>
+
+<details><summary>📘📝 Vantagem e desvantagem de mapear um dado/atlas numa só imagem?</summary>
+
++ 1 textura, 1 bind, 1 draw call; fácil de pintar. − células vazias (½ desperdiçada), resolução por face menor, bleeding entre faces com filtro/mipmap, vértices duplicados, costuras.
+</details>
+
+<details><summary>📝⚠ Quadrado de 2 triângulos com 1 cor verde e 5 vermelhas: procedimento para bloco verde uniforme?</summary>
+
+Duplicar vértices (3 da mesma cor no triângulo verde), ou `flat` (cor do provoking vertex), ou uniform de cor por draw call. Para região menor que o triângulo: subdividir.
+</details>
+
+<details><summary>📝⚠ O que roda no vertex shader × rasterizador × fragment shader? (attribute/uniform/varying)</summary>
+
+VS (por vértice): `MVP·pos`, normal matrix, TBN, Gouraud. Rasterizador: interpola varyings por fragmento. FS: Phong, `texture2D`, normal map. attribute = por vértice; uniform = igual no draw call; varying = vértice→fragmento, interpolado.
+</details>
+
+<details><summary>📝 Sintoma → parâmetro da câmera: some ao aproximar / ao afastar / cortado nos lados / achatado?</summary>
+
+Aproximar: `z_ndc<−1` ⇒ diminuir near. Afastar: `z_ndc>1` ⇒ aumentar far (ou aproximar). Lados: aumentar FOV ou afastar. Achatado: aspect = largura/altura. Corrija só o parâmetro que estourou e confira.
 </details>
 
 ## 🟡 Recorrência 1/3, ou 🟠 rebaixado por não estar no livro (4)
@@ -169,21 +219,6 @@ NDC [−1,1]→píxeis: `T(xmin,ymin,0)·S(Δx/2,Δy/2,1)·T(1,1,0)`; z mantém.
 <details><summary>📘 Mapeamento direto × inverso?</summary>
 
 Direto: textura→objeto (mundo). Inverso: fragmento→texel (feito no pipeline).
-</details>
-
-<details><summary>📝⚠ Por que a normal precisa da normal matrix?</summary>
-
-Normais não se transformam por M quando há escala não uniforme; usa-se `transpose(inverse(M))` e renormaliza.
-</details>
-
-<details><summary>📝⚠ Por que a interpolação linear de UV no ecrã distorce?</summary>
-
-Perspectiva não linear (÷w). Corrige-se interpolando s/w, t/w, 1/w e dividindo.
-</details>
-
-<details><summary>📝⚠ Normal mapping em espaço tangente: o que é TBN e onde se monta?</summary>
-
-Base (Tangente, Bitangente, Normal) da superfície. Monta-se no vertex shader com a normal transformada pela normal matrix; no fragment shader leva `n_map` para o mundo.
 </details>
 
 <details><summary>📘 Liste a ordem dos andares do pipeline de visualização.</summary>

@@ -61,11 +61,48 @@ Marcas: **[R]** caiu nas 3 provas · **[2/3]** caiu em 2 · **[1/3]** caiu em 1.
 | Pergunta | Resposta objetiva |
 |---|---|
 | Por que a textura fica **borrada/ruidosa ao longe**? | Minificação: muitos texels por píxel. Sem filtro ⇒ aliasing; com mipmapping ⇒ níveis baixos (borrão). **Solução:** mipmapping/trilinear; em superfícies oblíquas, filtragem anisotrópica ⚠. |
-| Por que **dois planos** iguais ficam diferentes? | Onde a luz é calculada: Gouraud (vértices) perde o brilho; Phong (fragmento) ou malha mais fina o reproduz. |
-| Cubo com **faces pretas**/aberração | Vetor da luz com sinal errado (`l` deve ir da superfície para a luz); normais não transformadas/normalizadas. |
-| Por que 1 vértice verde + 5 vermelhos dá **degradê**? | Interpolação linear dos atributos. Para áreas uniformes: vértices duplicados com a mesma cor (ou `flat`) ⚠. |
-| **Como dar UV** a um cubo/dado/cena? | (s,t) por vértice no intervalo da célula da textura; repetir = ir além de 1 com REPEAT ⚠; vértices por face duplicados. |
+| **Algoritmo "média dos texels num retângulo [u±Δu/2, v±Δv/2]"** (2024 P1): problema, limitações, melhorias | **Problema:** aliasing por minificação; 1 texel/fragmento (NEAREST) descarta os outros ⇒ cintilação. A média (filtro de caixa) resolve. **Limitações:** *performance* O(N) leituras/fragmento, N cresce com a distância; *qualidade* caixa alinhada aos eixos (a pegada oblíqua é trapézio/elipse), pesos iguais vazam frequências, não trata magnificação. **Melhorias:** mipmapping/trilinear (pré-filtra, O(1), +33 % memória); anisotrópico ⚠; bilinear p/ magnificação. |
+| **Mipmapping deixa o chão borrado** em ângulo rasante: por quê + como funciona a solução | 1 só nível por fragmento, escolhido pelo lado **maior** da pegada (alongada) ⇒ nível baixo demais ⇒ over-blur. **Anisotrópico ⚠:** acha eixo maior e menor da pegada; nível de mip pelo eixo **menor**; **2×–16× amostras ao longo do eixo maior**, combinadas. Mais caro, mas nítido. Trilinear só suaviza a troca de nível. |
+| Por que **dois planos** iguais ficam diferentes? | Onde a luz é calculada: Gouraud (vértices) perde o brilho; Phong (fragmento) ou malha mais fina o reproduz. **Vantagem/desvantagem:** Gouraud barato × impreciso no especular; Phong correto × caro; tesselar = mais geometria. |
+| Cubo com **faces pretas**/aberração | Vetor da luz com sinal errado (`l` deve ir da superfície para a luz); normais não transformadas/normalizadas. Ver checklist na seção 8. |
+| **"Avalie a resposta da IA/colega"** sobre o cubo iluminado (2025 Q3) | Julgue **item a item**: *sinal de L* (da luz p/ ponto = erro, causa mais provável) · *normal não normalizada* · *normal não transformada* (normal matrix `transpose(inverse(M))`) · *winding/normal p/ dentro* · *normal por face é correta num cubo* (flat, 24 vértices; **não** é bug). Diga **concordo / concordo em parte / discordo** e por quê. |
+| Por que 1 vértice verde + 5 vermelhos dá **degradê**? E como obter bloco uniforme? | Interpolação linear dos atributos pelo rasterizador. **Procedimento:** (i) duplicar vértices — 3 da mesma cor no triângulo desejado; (ii) `flat` (cor do *provoking vertex*) ⚠; (iii) uniform de cor por triângulo/draw call. Recorte menor que o triângulo ⇒ subdividir. |
+| **Como dar UV** a um cubo/dado/cena? | (s,t) por vértice no intervalo da célula da textura; repetir = ir além de 1 com REPEAT ⚠; vértices por face duplicados (24). Dado 4×3: u ∈ {0,¼,½,¾,1}, v ∈ {0,⅓,⅔,1}. Origem em cima ⇒ v → 1−v. |
+| **Vantagem/desvantagem** de um atlas/dado numa só imagem | **+** 1 textura, 1 bind, 1 draw call; fácil de pintar. **−** células vazias desperdiçam memória; resolução por face menor; **sangramento (bleeding)** entre faces vizinhas com filtro/mipmap; vértices duplicados; costuras. |
+| **Interpolação linear de UV** distorce em perspectiva: por quê + solução | A projeção (÷w) é não linear: espaçamento igual no 3D ≠ no ecrã; interpolar (s,t) no ecrã "dobra" a textura. **Correção ⚠:** interpolar `s/w, t/w, 1/w` (lineares no ecrã) e dividir: `s = (s/w)/(1/w)`. |
 | Por que **bump mapping** melhora a imagem? | Perturba as normais com o gradiente do mapa de altura, sem aumentar a geometria. |
-| Objeto está **visível**? | Testa −w ≤ x,y,z ≤ w; indica qual plano (near/far/lados) falha e qual parâmetro da câmera ajustar. |
+| **Normal mapping errado** (rocha chapada): causa + onde corrigir (2025 Q4a) ⚠ | **Causa:** a base **TBN** usa uma normal que não coincide com a geometria (normal não transformada/normalizada). **Solução no vertex shader:** `N = normalize(normalMatrix·aNormal)`, `T = normalize(T − N·dot(N,T))` (Gram-Schmidt), `B = cross(N,T)`; passa `TBN` como varying. **No fragment shader:** `n = 2·rgb − 1`; `normalize(TBN·n)` na iluminação. |
+| Objeto está **visível**? | Testa −w ≤ x,y,z ≤ w; indica qual plano (near/far/lados) falha e qual parâmetro da câmera ajustar (seção 8). |
 
-⚠ = não está no livro (aula/prática). Baixa prioridade: basta a ideia.
+⚠ = não está no livro (aula/prática). Baixa prioridade na teoria do livro, **mas caiu na 2025**: escreva a ideia.
+
+## 7. Shaders — o que roda onde ⚠
+| Estágio | Entrada → saída | Típico |
+|---|---|---|
+| **Vertex shader** (1× por vértice) | `attribute` (posição, normal, uv, cor) + `uniform` → `gl_Position` + `varying` | `MVP·pos`; normal matrix; monta TBN; **Gouraud** (ilumina aqui) |
+| **Rasterizador** (fixo) | varyings dos vértices → varyings por **fragmento** | **interpola linearmente** (com correção de perspectiva); `flat` desliga |
+| **Fragment shader** (1× por fragmento) | varyings + `uniform` + texturas → cor | **Phong** (normal interpolada, renormalizar); `texture2D(uv)`; normal map |
+
+- `attribute`/`in`: por vértice (buffers de posição, cor…) · `uniform`: igual p/ todo o draw call (MVP, luz, cor) · `varying`/`out→in`: vértice → fragmento, **interpolado**.
+- Dois buffers (posição, cor) + 6 vértices ⇒ cada vértice leva a sua cor; **sem compartilhar** vértices = cor por triângulo.
+- O mipmapping/filtragem é feito pela **GPU ao amostrar a textura** (parâmetros `MIN_FILTER`, `MAG_FILTER`, `WRAP_S/T`).
+
+## 8. Sintoma → causa → solução
+| Sintoma | Causa | Solução |
+|---|---|---|
+| Cubo/face **preta** ou iluminada "ao contrário" | `l` invertido; normal p/ dentro; normal sem normalizar/sem normal matrix | `l = normalize(luz − pos)`; corrigir winding; normalizar; `transpose(inverse(M))` |
+| Cena toda **escura** nas faces sem luz | sem termo ambiente | somar `ka·La` |
+| **Brilho especular** some/lavado | Gouraud (só vértices) ou α baixo | Phong por fragmento / malha mais fina; α alto = brilho concentrado |
+| Esfera **facetada** | normal por face (flat) | normais por vértice (médias) + Gouraud/Phong; cuidado: no cubo arestas vivas exigem 24 vértices |
+| **Sem sombras** | modelo local só vê luz direta | shadow map/ray tracing (fora do escopo) ⚠ |
+| Textura **pixelada** de perto | magnificação com NEAREST | `LINEAR`/bilinear |
+| Textura **borrada/cintilando** de longe | minificação | mipmap + trilinear; anisotrópico se rasante |
+| Textura **invertida/espelhada** | origem de v (canto sup. × inf.) ou ordem dos vértices | v → 1−v; conferir (0,0),(1,0),(1,1),(0,1) |
+| Textura **esticada/listrada** | UV não varia numa direção (mesmo valor em vértices opostos) | corrigir (s,t) por vértice daquela face |
+| Textura **não repete** / repete errado | UV ≤ 1 ou wrap CLAMP; atlas repete o atlas inteiro | UV até N com REPEAT; `fract(s)` na faixa do atlas ⚠ |
+| Textura "dobra" na diagonal (quad) | interpolação linear no ecrã | correção de perspectiva (s/w, t/w, 1/w) |
+| Objeto **some ao aproximar** | `z_ndc < −1` (antes do near) ou w ≤ 0 | diminuir **near** / afastar a câmera |
+| Objeto **some ao afastar** | `z_ndc > 1` (além do far) | aumentar **far** / aproximar a câmera |
+| Cortado nas **laterais** (|x| ou |y| > w) | FOV pequeno ou perto demais | aumentar **FOV** / afastar a câmera |
+| Imagem **achatada/esticada** | aspect ≠ viewport (largura/altura) | aspect = largura/altura |
+| Câmera "quebra"/tela vazia | Up paralelo à direção de visão | mudar Up |
