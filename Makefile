@@ -3,7 +3,7 @@ PYTHON ?= python3
 PROVA ?= 2025p1
 MAT ?= 20221060140130
 
-.PHONY: help up serve open test mvp pdf
+.PHONY: help up serve open test mvp pdf validar
 
 help: ## lista os alvos
 	@grep -E '^[a-z]+:.*##' $(MAKEFILE_LIST) | sed -E 's/:.*## /\t/'
@@ -29,3 +29,6 @@ mvp: ## calcula no terminal (matrícula padrão 20221060140130): make mvp PROVA=
 
 pdf: ## gera dist/resumo-teorico.pdf e dist/tutorial-planilha.pdf (A4, P&B)
 	@tools/pdf.sh
+
+validar: ## confere o script contra a planilha real (recalculada no LibreOffice)
+	@$(PYTHON) -I tools/validar_planilha.py
