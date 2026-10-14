@@ -86,3 +86,12 @@ Y=9:       PPPPPPPPPP
 ⚠ Nesta prova o **eye (3,32,1) está quase em cima do triângulo olhando para baixo**, quase paralelo ao Up (0,1,0) → lookAt é mal condicionado (cuidado ao justificar o Up).
 
 **2025 P1** (Y = 2…6): T e U ficam **fora do volume em todos os casos** com a leitura "rotação/escala em torno da origem para T; centro para U". Em T, z_ndc ≈ 1,05 → **além do far=6** (distância ≈ 6,8); em U, três vértices têm w<0 ou x,y,z fora. Correção (testada com o script para Y=2…6): **só aumentar o far resolve T** (far = 14 já basta para Y=3,4,5; Y=2 e 6 ficam parciais), mas **U continua fora** porque parte dele está *atrás/ao lado* da câmera (z < −5). É preciso **recuar a câmera**: `eye=(0,0,−20), far=30` deixa T dentro e U dentro (Y=3,4,5; parcial em Y=2,6); `eye=(0,0,−25), far=40` deixa **ambos dentro para todo Y = 2…6**.
+
+## Oclusão (um triângulo na frente do outro)
+A planilha **não** calcula, mas dá os NDC dos dois (`G27:I30` de cada). Método (é o Z-buffer à mão):
+1. **Cada triângulo está no volume?** Fora ⇒ não aparece, logo não há oclusão a discutir. Com `w ≤ 0` o teste não vale (recorte antes).
+2. **Sobrepõem-se na tela?** Compare **(x_ndc, y_ndc)** dos dois: caixas que não se tocam ⇒ sem oclusão. Se tocam, veja se algum vértice de um cai dentro do outro (ou se as arestas se cruzam).
+3. **Na região comum, quem tem o menor z_ndc?** Menor z = mais perto = **oculta** o outro (mesmo critério do Z-buffer, livro 8.4).
+4. **Conclusão por triângulo:** nenhuma área coberta ⇒ *visível*; parte coberta ⇒ *parcialmente oculto*; tudo coberto ⇒ *oculto*. Se os planos se cruzam (z muda de ordem), há trechos de cada um.
+
+No script: `python3 -I tools/mvp.py --prova 2025p1 --oclusao [--olho X Y Z] [--far F]`. Ele amostra a tela, compara o z_ndc interpolado e informa a % de cada triângulo oculta. **Com a matrícula do aluno e a câmera do enunciado, T e U ficam fora do volume** (então "não visíveis"); com o olho recuado (0,0,−25) e far 40 ambos entram e **não se sobrepõem** na tela.

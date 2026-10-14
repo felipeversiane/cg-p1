@@ -55,7 +55,7 @@ Se aparecer **"—"** ou mensagem em vez de números, falta preencher algo ou h�
 ## 5. Visível? Como interpretar
 - **Dentro** ⇔ para cada vértice `−w ≤ x, y, z ≤ w` (equivale a −1 ≤ NDC ≤ 1). Todos dentro → **visível**; alguns → **parcialmente** (recortado); nenhum → **fora**.
 - `z_ndc > 1` → **além do far** · `z_ndc < −1` → **antes do near** · `w ≤ 0` → **atrás da câmera** · `|x_ndc|` ou `|y_ndc|` > 1 → **fora dos lados**.
-- A planilha **não** calcula oclusão por outro objeto (isso é o Z-buffer).
+- A planilha **não** calcula oclusão por outro objeto (isso é o Z-buffer). À mão: (1) os dois estão no volume? (2) os (x_ndc, y_ndc) se sobrepõem? (3) na sobreposição, **menor z_ndc = na frente** e oculta o outro.
 
 ## 6. "Modifique a câmera para ficar dentro do volume"
 | Sintoma | Ajuste |

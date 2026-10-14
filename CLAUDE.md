@@ -50,7 +50,7 @@ Câmera olha para −z · vetores coluna · `MVP = P·V·M` · `M = T·S·R` (ro
 - **Target = centro** → centro **após** as transformações.
 - **Up** paralelo à direção de visão → câmera inválida (acontece na 2024 Estudo com eye (3,32,1)).
 - **near > 0**, far > near. **Aspect = largura/altura.**
-- **Visível?**: diga dentro/parcial/fora **e qual plano falha** (`z_ndc > 1` = além do far; `< −1` = antes do near; `w ≤ 0` = atrás). Oclusão por outro objeto não é calculada.
+- **Visível?**: diga dentro/parcial/fora **e qual plano falha** (`z_ndc > 1` = além do far; `< −1` = antes do near; `w ≤ 0` = atrás). Oclusão entre objetos: a planilha não calcula; use `python3 -I tools/mvp.py --prova 2025p1 --oclusao` (ou o método em `docs/mvp-passo-a-passo.md`): sobreposição em (x,y) NDC e **menor z_ndc na frente**.
 - "Modifique a câmera": corrija **só o parâmetro que estourou**; confira de novo.
 - Dê **nome** a cada matriz (`T(−c)`, `R`, `T(+c)`, `M_R`, `M_S`, `T`, `M`, `V`, `P`, `MVP`).
 

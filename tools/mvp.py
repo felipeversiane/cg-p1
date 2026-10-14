@@ -73,6 +73,46 @@ def perspective(fov, largura, altura, near, far, tipo="Vertical"):
     m[3][2] = -1
     return m
 
+def oclusao(a, b, n=400):
+    """Oclusão entre dois triângulos já projetados (resultados de run()).
+
+    Amostra o plano (x_ndc, y_ndc); onde os dois cobrem o mesmo ponto, vence o de MENOR z_ndc
+    (Z-buffer). Só vale para vértices com w > 0 (use depois de recortar/ajustar a câmera).
+    Devolve fração da área de cada triângulo que está coberta pelo outro."""
+    def bary(p, t):
+        (x1, y1), (x2, y2), (x3, y3) = [(q[0], q[1]) for q in t]
+        d = (y2 - y3) * (x1 - x3) + (x3 - x2) * (y1 - y3)
+        if abs(d) < 1e-12: return None
+        l1 = ((y2 - y3) * (p[0] - x3) + (x3 - x2) * (p[1] - y3)) / d
+        l2 = ((y3 - y1) * (p[0] - x3) + (x1 - x3) * (p[1] - y3)) / d
+        l3 = 1 - l1 - l2
+        return (l1, l2, l3) if min(l1, l2, l3) >= -1e-9 else None
+    ta, tb = a["ndc"], b["ndc"]
+    if None in ta or None in tb or any(c[3] <= 0 for c in a["clip"] + b["clip"]):
+        return {"aplicavel": False, "motivo": "há vértice com w ≤ 0 (atrás da câmera): recorte antes"}
+    xs = [q[0] for q in ta + tb]; ys = [q[1] for q in ta + tb]
+    x0, x1, y0, y1 = max(-1, min(xs)), min(1, max(xs)), max(-1, min(ys)), min(1, max(ys))
+    cnt_a = cnt_b = a_ocl = b_ocl = sobre = 0
+    for i in range(n):
+        for j in range(n):
+            p = (x0 + (x1 - x0) * (i + .5) / n, y0 + (y1 - y0) * (j + .5) / n)
+            ba, bb = bary(p, ta), bary(p, tb)
+            if ba: cnt_a += 1
+            if bb: cnt_b += 1
+            if ba and bb:
+                sobre += 1
+                za = sum(l * q[2] for l, q in zip(ba, ta)); zb = sum(l * q[2] for l, q in zip(bb, tb))
+                if za < zb: b_ocl += 1     # a está na frente → oculta b
+                else: a_ocl += 1
+    return {"aplicavel": True, "sobreposicao": sobre > 0,
+            "A_ocultado": a_ocl / cnt_a if cnt_a else 0, "B_ocultado": b_ocl / cnt_b if cnt_b else 0}
+
+def descreve_oclusao(r, nome_a="T", nome_b="U"):
+    if not r["aplicavel"]: return "Oclusão não avaliável: " + r["motivo"]
+    if not r["sobreposicao"]: return "Sem sobreposição na tela: nenhum oculta o outro."
+    def f(n, v): return (f"{n}: totalmente oculto" if v > .999 else f"{n}: parcialmente oculto ({v*100:.0f}% da área)" if v > .001 else f"{n}: não oculto")
+    return f(nome_a, r["A_ocultado"]) + " · " + f(nome_b, r["B_ocultado"])
+
 ESCALA_PIVO = None   # 'Origem' | 'Centro' | None (usa o do preset)
 
 def fmt(m):
@@ -182,6 +222,9 @@ if __name__ == "__main__":
     ap.add_argument("--penultimo", type=int, help="penúltimo dígito (alternativa a --matricula)")
     ap.add_argument("--demo", action="store_true", help="reproduz o estado atual da planilha")
     ap.add_argument("--escala-pivo", choices=["Origem", "Centro"], help="força o pivô da escala")
+    ap.add_argument("--oclusao", action="store_true", help="2025p1: avalia oclusão entre T e U")
+    ap.add_argument("--olho", nargs=3, type=float, metavar=("X", "Y", "Z"), help="2025p1: sobrescreve o olho")
+    ap.add_argument("--far", type=float, help="2025p1: sobrescreve o far")
     ap.add_argument("--ambos", action="store_true", help="roda as duas leituras do pivô da escala e compara")
     a = ap.parse_args()
     ESCALA_PIVO = a.escala_pivo
@@ -202,6 +245,15 @@ if __name__ == "__main__":
                     PROVAS[a.prova](ult, pen)
                 est = [l for l in buf.getvalue().splitlines() if l.startswith(("==", "--", "Estado"))]
                 print(f"[escala em torno de {piv}]"); print("\n".join("  " + l for l in est))
+        elif a.prova == "2025p1" and (a.oclusao or a.olho or a.far):
+            cam = {}
+            if a.olho: cam["eye"] = tuple(a.olho)
+            if a.far: cam["far"] = a.far
+            t, u = prova_2025_p1(ult, pen, cam=cam)
+            if a.oclusao:
+                print("== Oclusão (T × U) ==")
+                print(" ", t["estado"], "| T"); print(" ", u["estado"], "| U")
+                print(" ", descreve_oclusao(oclusao(t, u)))
         else:
             PROVAS[a.prova](ult, pen)
     else:
